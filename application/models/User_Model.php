@@ -29,4 +29,12 @@ class User_Model extends CI_Model {
         }
     }
 
+    public function isUniqueUsernameAJAX($username) {
+        $query = $this->db->query("SELECT * FROM `users` WHERE `user_name` = ?", array($username));
+        if($query->num_rows() == 1) {
+            return "username already exists";
+        }
+        return TRUE;
+    }
+
 }

@@ -90,4 +90,5 @@ abstract class Routes {
     const USER_LOGIN = "userLogin";
     const USER_LOGOUT = "userLogOut";
     const USER_DASHBOARD = "userHome";
+    const IS_UNIQUE_USERNAME_AJAX = "isUniqueUsernameAJAX";
 }

@@ -3,6 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User extends CI_Controller {
 
+	public function __construct()
+	{
+			parent::__construct();
+			$this->load->model('User_Model');
+	}
+
 	public function index()
 	{
 		$this->load->view('login');
@@ -15,7 +21,6 @@ class User extends CI_Controller {
 		$email = $this->input->post('email');
 		$password = sha1($this->input->post('password'));
 
-		$this->load->model('User_Model');
 		$result = $this->User_Model->userRegister($username, $email, $password);
 
 		if($result != FALSE) {
@@ -27,7 +32,6 @@ class User extends CI_Controller {
 		$username = $this->input->post('username');
 		$password = sha1($this->input->post('password'));
 
-		$this->load->model('User_Model');
 		$result = $this->User_Model->userLogin($username, $password);
 		//print_r($result);
 		//die();
@@ -58,5 +62,11 @@ class User extends CI_Controller {
 
 	public function userHome() {
 		$this->load->view('home');
+	}
+
+	public function isUniqueUsernameAJAX() {
+		$username = $this->input->post('usernameReg');
+		$result = $this->User_Model->isUniqueUsernameAJAX($username);
+		echo json_encode($result);
 	}
 }

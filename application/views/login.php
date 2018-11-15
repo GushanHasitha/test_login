@@ -7,36 +7,91 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="<?php echo base_url();?>public/js/jquery.validate.min.js"></script>
 <link rel="stylesheet" href="<?php echo base_url();?>public/css/styles.css">
 </head>
 
 <body>
 
-<script>
-    function register() {
-        var username = $('#usernameReg').val();
-        var email = $('#email').val();
-        var password = $('#password').val();
+<script type="text/javascript">
 
-        var URL = '<?php echo base_url(ROUTES::USER_REGISTER);?>';
-        $.post(URL, {'username': username, 'email': email, 'password': password}, function(data) {
-            var result = JSON.parse(data);
-            var div = document.createElement('div');
-            div.className = 'row';
-            div.role = 'alert';
-            div.innerHTML = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-            div.classList.add('alert-success');
-            $('#alertMessage').html(div);
-        })
+	var validateRegistrationForm
+	$(document).ready(function() {
+		validateRegistrationForm = $('#register-form').validate({
+			rules: {
+				usernameReg: {
+					required: true,
+					minlength: 3,
+					remote: {
+						url: "<?php echo base_url(ROUTES::IS_UNIQUE_USERNAME_AJAX);?>",
+						type: "post"
+					}
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				passwordReg: {
+					required: true,
+					minlength: 3
+				},
+				confirm_password: {
+					required: true,
+					equalTo: "#passwordReg"
+				}
+			},
+			messages: {
+				usernameReg: {
+					required: "username can't be blank",
+					minlength: "Your username must consist of at least 3 characters"
+				},	
+				email: {
+					required: "email can't be blank",
+					email: "Enter a valid email"
+				},
+				passwordReg: {
+					required: "password can't be blank",
+					minlength: "Your password must consist of at least 2 characters"
+				},
+				confirm_password: {
+					required: "confirm password can't be blank",
+					equalTo: "Please enter the same password as above"
+				}
+			}
+		});
+		clearRegistrationForm();
+	});
+
+	function clearRegistrationForm() {
+		$('#usernameReg').val('');
+		$('#email').val('');
+		$('#passwordReg').val('');
+		$('#confirm_password').val('');
+		validateRegistrationForm.resetForm();
+	}
+
+    function register() {
+		if($('#register-form').valid()) {
+			var username = $('#usernameReg').val();
+			var email = $('#email').val();
+			var password = $('#password').val();
+
+			var URL = '<?php echo base_url(ROUTES::USER_REGISTER);?>';
+			$.post(URL, {'username': username, 'email': email, 'password': password}, function(data) {
+				clearRegistrationForm();
+				var result = JSON.parse(data);
+				var div = document.createElement('div');
+				div.className = 'row';
+				div.role = 'alert';
+				div.innerHTML = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+				div.classList.add('alert-success');
+				$('#alertMessage').html(div);
+			})
+		}	
     }
 </script>
 
-   
-
 <div class="container">
-
-             
-
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
@@ -85,16 +140,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								</form>
 								<form id="register-form" role="form" style="display: none;">
 									<div class="form-group">
-										<input type="text" name="username" id="usernameReg" tabindex="1" class="form-control" placeholder="Username" value="">
+										<input type="text" name="usernameReg" id="usernameReg" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
 									<div class="form-group">
 										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
 									</div>
 									<div class="form-group">
-										<input type="password" name="password" id="passwordReg" tabindex="2" class="form-control" placeholder="Password">
+										<input type="password" name="passwordReg" id="passwordReg" tabindex="2" class="form-control" placeholder="Password">
 									</div>
 									<div class="form-group">
-										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+										<input type="password" name="confirm_password" id="confirm_password" tabindex="2" class="form-control" placeholder="Confirm Password">
 									</div>
 									<div class="form-group">
 										<div class="row">

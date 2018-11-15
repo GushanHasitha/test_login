@@ -58,3 +58,4 @@ $route[ROUTES::USER_REGISTER] = 'user/userRegister';
 $route[ROUTES::USER_LOGIN] = 'user/userLogin';
 $route[ROUTES::USER_LOGOUT] = 'user/userLogOut';
 $route[ROUTES::USER_DASHBOARD] = 'user/userHome';
+$route[ROUTES::IS_UNIQUE_USERNAME_AJAX] = 'user/isUniqueUsernameAJAX';

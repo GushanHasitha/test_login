@@ -11,11 +11,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 
 <body>
+
+<script>
+    function register() {
+        var username = $('#usernameReg').val();
+        var email = $('#email').val();
+        var password = $('#password').val();
+
+        var URL = '<?php echo base_url(ROUTES::USER_REGISTER);?>';
+        $.post(URL, {'username': username, 'email': email, 'password': password}, function(data) {
+            var result = JSON.parse(data);
+            var div = document.createElement('div');
+            div.className = 'row';
+            div.role = 'alert';
+            div.innerHTML = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+            div.classList.add('alert-success');
+            $('#alertMessage').html(div);
+        })
+    }
+</script>
+
+   
+
 <div class="container">
+
+             
+
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-login">
 					<div class="panel-heading">
+
+                        <div id="alertMessage"></div>
+                        
+                        <?php  
+                        if($this->session->flashdata('error')) {
+                            ?>
+                        <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <?php echo $this->session->flashdata('error'); ?>
+                        </div>
+                        <?php  
+                        }
+                        ?>
+                                
 						<div class="row">
 							<div class="col-xs-6">
 								<a href="#" class="active" id="login-form-link">Login</a>
@@ -29,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-lg-12">
-								<form id="login-form" action="" method="post" role="form" style="display: block;">
+								<form id="login-form" action="<?php echo base_url(ROUTES::USER_LOGIN);?>" method="post" role="form" style="display: block;">
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -44,7 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										</div>
 									</div>
 								</form>
-								<form id="register-form" action="" method="post" role="form" style="display: none;">
+								<form id="register-form" role="form" style="display: none;">
 									<div class="form-group">
 										<input type="text" name="username" id="usernameReg" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -60,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+												<button type="button" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" onclick="register()">Register</button>
 											</div>
 										</div>
 									</div>

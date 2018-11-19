@@ -84,11 +84,15 @@ defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
-abstract class Routes {
+abstract class ROUTES {
     const USER = "user";
     const USER_REGISTER = "userRegister";
     const USER_LOGIN = "userLogin";
     const USER_LOGOUT = "userLogOut";
     const USER_DASHBOARD = "userHome";
     const IS_UNIQUE_USERNAME_AJAX = "isUniqueUsernameAJAX";
+}
+
+abstract class ERROR_CODES {
+    const DB_ERROR = 'msg_db_error';
 }

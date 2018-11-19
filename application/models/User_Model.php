@@ -4,29 +4,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class User_Model extends CI_Model {
 
     public function userRegister($username, $email, $password) {
+        //print_r($password);
+        //die();
         $this->db->trans_start();
         $this->db->query("INSERT INTO `users` (`user_name`, `email`, `password`) VALUES (?, ?, ?)", array($username, $email, $password));
         $this->db->trans_complete();
+        //$o = $this->db->trans_status();
+        //print_r($o);
+        //die();
 
         if($this->db->trans_status() === FALSE) {
-            
+           
+            throw new Exception("database error occurred");
         }
-        else {
-            $output = "you are successfully registered";
-        }
-        return $output;
     }
 
-    public function userLogin($username, $password) {
+    public function userLogin($username = '', $password = '') {
+
         //print_r($username);
+        //print_r($password);
         //die();
-        $query = $this->db->query("SELECT * FROM `users` WHERE `user_name` = ? AND `password` = ?", array($username, $password));
-        if($query->num_rows() == 1) {
-            return $query->row();
+
+        if (empty($username) || empty($password)) {
+            throw new Exception('username or password can\'t be empty');
         }
-        else {
-            return FALSE;
+
+        $query = $this->db->query("SELECT * FROM `users` WHERE `user_name` = ?", array($username));
+        $admin = $query->row();
+
+        if(!isset($admin)) {
+            throw new Exception('Invalid details');
         }
+
+        if(!password_verify($password, $admin->password)) {
+            throw new Exception('password is not correct');
+        }
+        
+        return $admin;
     }
 
     public function isUniqueUsernameAJAX($username) {

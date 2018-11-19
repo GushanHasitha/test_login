@@ -70,25 +70,48 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		validateRegistrationForm.resetForm();
 	}
 
+	function showTransactionMessage(element, type, message) {
+		var div = document.createElement('div');
+		div.className = 'alert alert-dismissible';
+		div.role = 'alert';
+		div.innerHTML = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		
+		switch(type) {
+			case "success":
+				div.classList.add('alert-success');
+				break;
+			case "failed": 
+				div.classList.add('alert-danger');
+				break;
+		}
+
+		var msg = document.createElement('div');
+		msg.className = 'msg-text';
+		msg.innerHTML = message;
+		div.appendChild(msg);
+		element.empty();
+		element.append(div);
+	}
+
     function register() {
 		if($('#register-form').valid()) {
 			var username = $('#usernameReg').val();
 			var email = $('#email').val();
-			var password = $('#password').val();
+			var password = $('#passwordReg').val();
 
 			var URL = '<?php echo base_url(ROUTES::USER_REGISTER);?>';
 			$.post(URL, {'username': username, 'email': email, 'password': password}, function(data) {
 				clearRegistrationForm();
+				
+				console.log(JSON.stringify(data));
+				
 				var result = JSON.parse(data);
-				var div = document.createElement('div');
-				div.className = 'row';
-				div.role = 'alert';
-				div.innerHTML = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-				div.classList.add('alert-success');
-				$('#alertMessage').html(div);
+				showTransactionMessage($('#alertMessage'), result.ret, result.message);
+				
 			})
 		}	
     }
+
 </script>
 
 <div class="container">
@@ -97,14 +120,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<div class="panel panel-login">
 					<div class="panel-heading">
 
-                        <div id="alertMessage"></div>
-                        
-                        <?php  
-                        if($this->session->flashdata('error')) {
+                        <section id="alertMessage"></section>
+
+						 <?php  
+                        if(isset($error)) {
                             ?>
                         <div class="alert alert-danger" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <?php echo $this->session->flashdata('error'); ?>
+                        <?php echo $error; ?>
                         </div>
                         <?php  
                         }

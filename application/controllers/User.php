@@ -19,34 +19,59 @@ class User extends CI_Controller {
 		//die();
 		$username = $this->input->post('username');
 		$email = $this->input->post('email');
-		$password = sha1($this->input->post('password'));
+		$password = $this->input->post('password');
+		$password = password_hash($password, PASSWORD_DEFAULT);
 
-		$result = $this->User_Model->userRegister($username, $email, $password);
+		//print_r($password);
+		//die();
 
-		if($result != FALSE) {
-			echo json_encode($result);
+		$out = "";
+
+		try{
+			$out = "{\"ret\":\"success\", \"message\":\"You are successfully Registered\"}";
+			$this->User_Model->userRegister($username, $email, $password);		
 		}
+		catch (Exception $exception)
+		{	
+			//print_r('dsfs');
+			//die();
+			$out = "{\"ret\":\"failed\", \"message\":\"" . $exception->getMessage() . "\"}";
+		}
+
+		echo $out;
 	}
 
 	public function userLogin() {
-		$username = $this->input->post('username');
-		$password = sha1($this->input->post('password'));
+		try {
+			$username = $this->input->post('username');
+			$password = $this->input->post('password');
+			//print_r($password);
+			//die();
 
-		$result = $this->User_Model->userLogin($username, $password);
-		//print_r($result);
-		//die();
-		if($result != FALSE) {
-			$newdata = array(
-				'username'  => $result->user_name,
-				'email'     => $result->email,
-				'logged_in' => TRUE
-			);
-			$this->session->set_userdata($newdata);
-			redirect(ROUTES::USER_DASHBOARD);
+			$result = $this->User_Model->userLogin($username, $password);
+			
+			//print_r($result);
+			//die();
+			if(isset($result)) {
+				$newdata = array(
+					'username'  => $result->user_name,
+					'email'     => $result->email,
+					'logged_in' => TRUE
+				);
+				$this->session->set_userdata($newdata);
+				//print_r($_SESSION);
+				//die();
+				redirect(ROUTES::USER_DASHBOARD);
+			}
+			else {
+				$data['error'] = 'Incorrect username or password.';
+				$this->load->view('login', $data);
+			}
+		
 		}
-		else {
-			$this->session->set_flashdata('error', 'Incorrect username or password.');
-			$this->load->view('login');
+		catch(Exception $e) {
+			$data['error'] = $e->getMessage();
+			$this->load->view('login', $data);
 		}
 	}
 

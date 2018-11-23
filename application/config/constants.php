@@ -91,6 +91,10 @@ abstract class ROUTES {
     const USER_LOGOUT = "userLogOut";
     const USER_DASHBOARD = "userHome";
     const IS_UNIQUE_USERNAME_AJAX = "isUniqueUsernameAJAX";
+    const MANAGE_USERS = "manageUsers";
+    const GET_ALL_USERS = "getAllUsers";
+    const DELETE_USER_AJAX = "deleteUserAJAX";
+    const UPDATE_USER_AJAX = "updateUserAJAX";
 }
 
 abstract class ERROR_CODES {

@@ -51,4 +51,28 @@ class User_Model extends CI_Model {
         return TRUE;
     }
 
+    public function getAllUsers() {
+        $query = $this->db->query("SELECT * FROM `users`");
+        return $query->result();
+    }
+
+    public function deleteUserAJAX($id = '') {
+       $this->db->trans_start();
+       $this->db->query("DELETE FROM `users` WHERE `id` = ?", array($id));
+       $this->db->trans_complete();
+
+       if($this->db->trans_status() === FALSE) {
+           throw new Exception("database error occurred");
+       }
+    }
+
+    public function updateUserAJAX($id = '', $username = '', $email = '') {
+        $this->db->trans_start();
+        $this->db->query("UPDATE `users` SET `user_name` = ?, `email` = ? WHERE `id` = ?", array($username, $email, $id));
+        $this->db->trans_complete();
+
+        if($this->db->trans_status() === FALSE) {
+            throw new Exception("database error occurred");
+        }
+    }
 }

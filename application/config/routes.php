@@ -59,3 +59,8 @@ $route[ROUTES::USER_LOGIN] = 'user/userLogin';
 $route[ROUTES::USER_LOGOUT] = 'user/userLogOut';
 $route[ROUTES::USER_DASHBOARD] = 'user/userHome';
 $route[ROUTES::IS_UNIQUE_USERNAME_AJAX] = 'user/isUniqueUsernameAJAX';
+
+$route[ROUTES::MANAGE_USERS] = 'user/manageUsers';
+$route[ROUTES::GET_ALL_USERS] = 'user/getAllUsers';
+$route[ROUTES::DELETE_USER_AJAX] = 'user/deleteUserAJAX';
+$route[ROUTES::UPDATE_USER_AJAX] = 'user/updateUserAJAX';

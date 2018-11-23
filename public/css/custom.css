@@ -1,0 +1,20 @@
+.float-right {
+    float: right;
+    margin: 6px;
+}
+
+.action-btn {
+    cursor: pointer;
+}
+
+.text-danger {
+    color: #F44336;
+}
+
+.action-btn-column {
+    text-align: right;
+}
+
+.modal-dialog {
+    margin-top: 200px;
+}

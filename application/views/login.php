@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="<?php echo base_url();?>public/js/jquery.validate.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url();?>public/css/styles.css">
+<link rel="stylesheet" href="<?php echo base_url();?>public/css/login/styles.css">
 </head>
 
 <body>

@@ -69,8 +69,8 @@ class User extends CI_Controller {
 			}
 		
 		}
-		catch(Exception $e) {
-			$data['error'] = $e->getMessage();
+		catch(Exception $exception) {
+			$data['error'] = $exception->getMessage();
 			$this->load->view('login', $data);
 		}
 	}
@@ -86,6 +86,8 @@ class User extends CI_Controller {
 	}
 
 	public function userHome() {
+		$this->load->view('header');
+		$this->load->view('sidebar');
 		$this->load->view('home');
 	}
 
@@ -93,5 +95,47 @@ class User extends CI_Controller {
 		$username = $this->input->post('usernameReg');
 		$result = $this->User_Model->isUniqueUsernameAJAX($username);
 		echo json_encode($result);
+	}
+
+	public function manageUsers() {
+		$this->load->view('header');
+		$this->load->view('sidebar');
+		$this->load->view('manageUsers');
+	}
+
+	public function getAllUsers() {
+		echo json_encode($this->User_Model->getAllUsers());
+	}
+
+	public function deleteUserAJAX() {
+		$out = "";
+
+		$id = $this->input->post('id');
+
+		try {
+			$out = "{\"ret\":\"success\", \"message\":\"You are successfully Deleted\"}";
+			$this->User_Model->deleteUserAJAX($id);
+		}
+		catch(Exception $exception) {
+			$out = "{\"ret\":\"failed\", \"message\":\"" . $exception->getMessage() . "\"}";
+		}
+		echo $out;
+	}
+
+	public function updateUserAJAX() {
+		$id = $this->input->post('id');
+		$username = $this->input->post('username');
+		$email = $this->input->post('email');
+
+		$out = "";
+
+		try {
+			$out = "{\"ret\":\"success\", \"message\":\"You are successfully Updated\"}";
+			$this->User_Model->updateUserAJAX($id, $username, $email);
+		}
+		catch(Exception $exception) {
+			$out = "{\"ret\":\"failed\", \"message\":\"" . $exception->getMessage(). "\"}";
+		}
+		echo $out;
 	}
 }
